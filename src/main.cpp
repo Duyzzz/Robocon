@@ -1,3 +1,4 @@
+#include<Arduino.h>
 #include <PS2X_lib.h>  //for v1.6
 #include "moving.h"
 #include <statusPs2.h>
@@ -9,9 +10,9 @@
 // create PS2 Controller Class
 short carSpeed;
 
+Car rabbit;
 
 void setUpRabbit(){
-  Car rabbit;
   rabbit.setTopLeftMotorPins(21, 20, 7);
   rabbit.setTopRightMotorPins(17, 16, 4);
   rabbit.setBottomLeftMotorPins(18, 19, 6);
@@ -19,26 +20,17 @@ void setUpRabbit(){
   rabbit.defineMotorPins();
 }
 
-void speedSet(){
-  carSpeed = 123;
-}
 
 void setup()
 {
-  Serial.begin(57600);
   setUpRabbit();
+  Serial.begin(57600);
   setupFunction();
 }
 
 
 void loop()
 {
-  //getDirectionAndMove(ps2x.Analog(PSS_LX), ps2x.Analog(PSS_LY));
-  Serial.print("x  =  ");
-  Serial.print(ps2x.Analog(PSS_LX) - 127);
-  Serial.print("   y =  ");
-  Serial.print(127 - ps2x.Analog(PSS_LY));
-  Serial.print("  speed: ");
-  Serial.println(speed(ps2x.Analog(PSS_LX), ps2x.Analog(PSS_LY)));
+  carSpeed = 12;
   buttonJustClick();
 }
