@@ -9,23 +9,24 @@
 // create PS2 Controller Class
 short carSpeed;
 
-Motor topLeftMotor(21, 20, 7);
-Motor topRightMotor(17, 16, 4);
-Motor bottomLeftMotor(18, 19, 6);
-Motor bottomRightMotor(14, 15, 5);
+
+void setUpRabbit(){
+  Car rabbit;
+  rabbit.setTopLeftMotorPins(21, 20, 7);
+  rabbit.setTopRightMotorPins(17, 16, 4);
+  rabbit.setBottomLeftMotorPins(18, 19, 6);
+  rabbit.setBottomRightMotorPins(14, 15, 5);
+  rabbit.defineMotorPins();
+}
+
 void speedSet(){
   carSpeed = 123;
 }
-void definePinUsing(){
-  topLeftMotor.definePin();
-  topRightMotor.definePin();
-  bottomLeftMotor.definePin();
-  bottomRightMotor.definePin();
-}
+
 void setup()
 {
   Serial.begin(57600);
-  definePinUsing();
+  setUpRabbit();
   setupFunction();
 }
 

@@ -2,6 +2,7 @@
 
 class Motor{
     public:
+    Motor() = default;
     Motor (unsigned char upPin, unsigned char downPin, unsigned char speedPin){
         UpPin = upPin;
         DownPin = downPin;
@@ -57,125 +58,105 @@ unsigned char direction(short x, short y){
     else return 1;
   }
 }
-/*class Car {
+class Car {
   private:
-  Motor topLeftMotor;
-  Motor topRightMotor;
-  Motor bottomLeftMotor;
-  Motor bottomRightMotor;
+    Motor TopLeftMotor;
+    Motor TopRightMotor;
+    Motor BottomLeftMotor;
+    Motor BottomRightMotor;
   public:
-  
-};*/
+    Car() = default; // define default constructor
+    Car(Motor topLeftMotor, Motor topRightMotor, Motor bottomLeftMotor, Motor bottomRightMotor){
+      TopLeftMotor = topLeftMotor;
+      TopRightMotor = topRightMotor;
+      BottomLeftMotor = bottomLeftMotor;
+      BottomRightMotor = bottomRightMotor;
+    }
+    void setTopLeftMotorPins(unsigned char upPin, unsigned char downPin, unsigned char speedPin) {
+      TopLeftMotor.defineMotor(upPin, downPin, speedPin);
+    }
+    void setTopRightMotorPins(unsigned char upPin, unsigned char downPin, unsigned char speedPin) {
+      TopRightMotor.defineMotor(upPin, downPin, speedPin);
+    }
+    void setBottomLeftMotorPins(unsigned char upPin, unsigned char downPin, unsigned char speedPin) {
+      BottomLeftMotor.defineMotor(upPin, downPin, speedPin);
+    }
+    void setBottomRightMotorPins(unsigned char upPin, unsigned char downPin, unsigned char speedPin) {
+      BottomRightMotor.defineMotor(upPin, downPin, speedPin);
+    }
+    void defineMotorPins(){
+      TopLeftMotor.definePin();
+      TopRightMotor.definePin();
+      BottomLeftMotor.definePin();
+      BottomRightMotor.definePin();
+    }
+    void moveRight(int speed){
+      TopLeftMotor.setStatus(-1);
+      BottomLeftMotor.setStatus(1);
+      TopRightMotor.setStatus(1);
+      BottomRightMotor.setStatus(-1);
+      TopLeftMotor.setSpeed(speed);
+      TopRightMotor.setSpeed(speed);
+      BottomLeftMotor.setSpeed(speed);
+      BottomRightMotor.setSpeed(speed);
+    }
+    void moveLeft(int speed){
+      TopLeftMotor.setStatus(1);
+      BottomLeftMotor.setStatus(-1);
+      TopRightMotor.setStatus(-1);
+      BottomRightMotor.setStatus(1);
+      TopLeftMotor.setSpeed(speed);
+      TopRightMotor.setSpeed(speed);
+      BottomLeftMotor.setSpeed(speed);
+      BottomRightMotor.setSpeed(speed);
+    }
+    void moveForward(int speed){
+      TopLeftMotor.setStatus(1);
+      BottomLeftMotor.setStatus(1);
+      TopRightMotor.setStatus(1);
+      BottomRightMotor.setStatus(1);
+      TopLeftMotor.setSpeed(speed);
+      TopRightMotor.setSpeed(speed);
+      BottomLeftMotor.setSpeed(speed);
+      BottomRightMotor.setSpeed(speed);
+    }
+    void moveBackward(int speed){
+      TopLeftMotor.setStatus(-1);
+      BottomLeftMotor.setStatus(-1);
+      TopRightMotor.setStatus(-1);
+      BottomRightMotor.setStatus(-1);
+      TopLeftMotor.setSpeed(speed);
+      TopRightMotor.setSpeed(speed);
+      BottomLeftMotor.setSpeed(speed);
+      BottomRightMotor.setSpeed(speed);
+    }
 
-
-
-void moveRight(int speed){
-  topLeftMotor.setStatus(-1);
-  bottomLeftMotor.setStatus(1);
-  topRightMotor.setStatus(1);
-  bottomRightMotor.setStatus(-1);
-  topLeftMotor.setSpeed(speed);
-  topRightMotor.setSpeed(speed);
-  bottomLeftMotor.setSpeed(speed);
-  bottomRightMotor.setSpeed(speed);
-}
-void moveLeft(int speed){
-  topLeftMotor.setStatus(1);
-  bottomLeftMotor.setStatus(-1);
-  topRightMotor.setStatus(-1);
-  bottomRightMotor.setStatus(1);
-  topLeftMotor.setSpeed(speed);
-  topRightMotor.setSpeed(speed);
-  bottomLeftMotor.setSpeed(speed);
-  bottomRightMotor.setSpeed(speed);
-}
-void moveForward(int speed){
-  topLeftMotor.setStatus(1);
-  bottomLeftMotor.setStatus(1);
-  topRightMotor.setStatus(1);
-  bottomRightMotor.setStatus(1);
-  topLeftMotor.setSpeed(speed);
-  topRightMotor.setSpeed(speed);
-  bottomLeftMotor.setSpeed(speed);
-  bottomRightMotor.setSpeed(speed);
-}
-void moveBackward(int speed){
-  topLeftMotor.setStatus(-1);
-  bottomLeftMotor.setStatus(-1);
-  topRightMotor.setStatus(-1);
-  bottomRightMotor.setStatus(-1);
-  topLeftMotor.setSpeed(speed);
-  topRightMotor.setSpeed(speed);
-  bottomLeftMotor.setSpeed(speed);
-  bottomRightMotor.setSpeed(speed);
-}
-// moving so slowly can help us do everything exactly.
-void moveSlowLeft(){
-  topLeftMotor.setStatus(1);
-  bottomLeftMotor.setStatus(-1);
-  topRightMotor.setStatus(-1);
-  bottomRightMotor.setStatus(1);
-  topLeftMotor.setSpeed(80);
-  topRightMotor.setSpeed(80);
-  bottomLeftMotor.setSpeed(80);
-  bottomRightMotor.setSpeed(80);
-}
-void moveSlowRight(){
-  topLeftMotor.setStatus(-1);
-  bottomLeftMotor.setStatus(1);
-  topRightMotor.setStatus(1);
-  bottomRightMotor.setStatus(-1);
-  topLeftMotor.setSpeed(80);
-  topRightMotor.setSpeed(80);
-  bottomLeftMotor.setSpeed(80);
-  bottomRightMotor.setSpeed(80);
-}
-void moveSlowForward(){
-  topLeftMotor.setStatus(1);
-  bottomLeftMotor.setStatus(1);
-  topRightMotor.setStatus(1);
-  bottomRightMotor.setStatus(1);
-  topLeftMotor.setSpeed(80);
-  topRightMotor.setSpeed(80);
-  bottomLeftMotor.setSpeed(80);
-  bottomRightMotor.setSpeed(80);
-}
-void moveSlowBackward(){
-  topLeftMotor.setStatus(-1);
-  bottomLeftMotor.setStatus(-1);
-  topRightMotor.setStatus(-1);
-  bottomRightMotor.setStatus(-1);
-  topLeftMotor.setSpeed(80);
-  topRightMotor.setSpeed(80);
-  bottomLeftMotor.setSpeed(80);
-  bottomRightMotor.setSpeed(80);
-}
-void standStill(){
-  topLeftMotor.setSpeed(0);
-  topRightMotor.setSpeed(0);
-  bottomLeftMotor.setSpeed(0);
-  bottomRightMotor.setSpeed(0);
-}
-void turnLeftDrection(){
-  
-}
-void getDirectionAndMove(unsigned char x, unsigned char y, short carSpeed){
-  unsigned char directionValue = direction(x, y);
-  switch (directionValue)
-  {
-  case 1: standStill();
-    break;
-  case 2: moveForward(carSpeed);
-    break;
-  case 3: moveRight(carSpeed);
-    break;
-  case 4: moveBackward(carSpeed);
-    break;
-  case 5: moveLeft(carSpeed);
-    break;
-  default:
-    standStill();
-    break;
+    void standStill(){
+      TopLeftMotor.setSpeed(0);
+      TopRightMotor.setSpeed(0);
+      BottomLeftMotor.setSpeed(0);
+      BottomRightMotor.setSpeed(0);
+    } 
+  void getDirectionAndMove(unsigned char x, unsigned char y, short carSpeed){
+    unsigned char directionValue = direction(x, y);
+    switch (directionValue)
+    {
+    case 1: standStill();
+      break;
+    case 2: moveForward(carSpeed);
+      break;
+    case 3: moveRight(carSpeed);
+      break;
+    case 4: moveBackward(carSpeed);
+      break;
+    case 5: moveLeft(carSpeed);
+      break;
+    default:
+      standStill();
+      break;
+    }
   }
-}
+};
+
+
 
