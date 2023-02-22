@@ -38,5 +38,8 @@ class Button{
                 Status = false;
             }
         }
+        bool status(){
+            return Status;
+        }
 
 };
