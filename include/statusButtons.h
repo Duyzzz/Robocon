@@ -20,25 +20,29 @@ void determineSpeedStatus(){
 
 class Button{
     private:
-        unsigned char DigitalPin;
         bool Status;
         unsigned long TimeDelay;
+        unsigned int IntNumber;
     public:
-        Button(unsigned char digitalPin, unsigned long timeDelay = 0, bool status = false){
-            DigitalPin = digitalPin;
+        Button(unsigned int intNumber, unsigned long timeDelay = 0, bool status = false){
+            IntNumber = intNumber;
             Status = status;
             TimeDelay = timeDelay;
         }
+        bool checkIfPress(){
+            return ps2x.Button(IntNumber);
+        }
         void determineStatus(){
-            if(digitalRead(DigitalPin) == 0 && Status == false){
+            if(checkIfPress() && Status == false){
                 Status = true;
                 TimeDelay = millis();
             }
-            if(millis() - TimeDelay > 20 && digitalRead(DigitalPin) == 1 && Status == true){
+            if(millis() - TimeDelay > 20 && checkIfPress() == 0 && Status == true){
                 Status = false;
             }
         }
-        bool status(){
+        bool callStatus(){
+            determineStatus();
             return Status;
         }
 

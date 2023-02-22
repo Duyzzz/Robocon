@@ -10,6 +10,8 @@
 */
 // create PS2 Controller Class
 
+short speedValue = 123;
+
 void changeSpeed(bool increaseOrDecrease/*true is increase false is decrease*/){
   if(increaseOrDecrease) speedStatus = speedStatus + 10;
   else speedStatus = speedStatus - 10;
@@ -26,6 +28,33 @@ void setUpRabbit(){
   rabbit.defineMotorPins();
 }
 
+void moving(){
+  if(error == 1)
+    return; 
+  
+  if(type == 2)
+  {
+
+  }
+  else
+  {
+    // DualShock Controller
+    // read controller and set large motor to spin at 'vibrate' speed
+    ps2x.read_gamepad(false, vibrate);
+
+    // this will set the large motor vibrate speed based on how hard you press the blue (X) button
+    vibrate = ps2x.Analog(PSAB_BLUE);
+    
+    // will be TRUE if any button changes state (on to off, or off to on)
+    
+    if(ps2x.Button(PSB_L1) || ps2x.Button(PSB_R1))
+    {
+      rabbit.run(ps2x.Analog(PSS_RX), ps2x.Analog(PSS_RY), 123);
+    }
+  }
+
+delay(20);
+}
 
 void setup()
 {
@@ -37,15 +66,19 @@ void setup()
   pinMode(decreaseButton, INPUT_PULLUP);
   pinMode(switchSpeedStatusButton, INPUT_PULLUP);
 }
-
+// test:
+Button L3(PSB_RED);
 
 void loop()
 {
-  determineSpeedStatus();
-  if(speedStatus){
-    if(millis() - timeDelaySpeed > 20 && digitalRead(increaseButton == 0)){
-      /*testing time*/
-    }
-  }
-  buttonJustClick();
+  // determineSpeedStatus();
+  // if(speedStatus){
+  //   if(millis() - timeDelaySpeed > 20 && digitalRead(increaseButton == 0)){
+  //     /*testing time*/
+  //   }
+  // }
+  // if(L3.callStatus()){
+  //   Serial.print("true");
+  // }
+  moving();
 }

@@ -49,7 +49,7 @@ unsigned char speed(short x, short y){
 unsigned char direction(short x, short y){
   x = x - 127;
   y = -y + 127;
-  if(x*x + y*y <= 100) return 1; // 1 for standing still
+  if(x*x + y*y <= 50*50*2) return 1; // 1 for standing still
   else {
     if((y > - x) && (x < y)) return 2; // 2 for moving forward
     else if((x > y) && (y > - x)) return 3; // 3 for moving right
@@ -137,24 +137,40 @@ class Car {
       BottomLeftMotor.setSpeed(0);
       BottomRightMotor.setSpeed(0);
     } 
-  void getDirectionAndMove(unsigned char x, unsigned char y, short carSpeed){
+  void run(unsigned char x, unsigned char y, short carSpeed){
     unsigned char directionValue = direction(x, y);
     switch (directionValue)
     {
-    case 1: standStill();
+    case 1: {
+      Serial.println("standing still");
+      standStill();
+    }
       break;
-    case 2: moveForward(carSpeed);
+    case 2: {
+      Serial.println("moving forward with");
+      moveForward(carSpeed);
       break;
-    case 3: moveRight(carSpeed);
+    }
+    case 3:{
+      Serial.println("moving right with");
+      moveRight(carSpeed);
       break;
-    case 4: moveBackward(carSpeed);
+      }
+    case 4: {
+      Serial.println("moving back with");
+      moveBackward(carSpeed);
       break;
-    case 5: moveLeft(carSpeed);
+      }
+    case 5: {
+      Serial.println("moving left with");
+      moveLeft(carSpeed);
       break;
+      }
     default:
       standStill();
       break;
     }
+    delay(20);
   }
 };
 
