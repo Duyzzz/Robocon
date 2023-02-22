@@ -23,7 +23,7 @@ void setUpRabbit(){
   timeDelaySpeed = millis();
   rabbit.setTopLeftMotorPins(21, 20, 7);
   rabbit.setTopRightMotorPins(17, 16, 4);
-  rabbit.setBottomLeftMotorPins(18, 19, 6);
+  rabbit.setBottomLeftMotorPins(8, 10, 6);
   rabbit.setBottomRightMotorPins(14, 15, 5);
   rabbit.defineMotorPins();
 }
