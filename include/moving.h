@@ -49,7 +49,7 @@ unsigned char speed(short x, short y){
 unsigned char direction(short x, short y){
   x = x - 127;
   y = -y + 127;
-  if(x*x + y*y <= 50*50*2) return 1; // 1 for standing still
+  if(x*x + y*y <= 50*50) return 1; // 1 for standing still
   else {
     if((y > - x) && (x < y)) return 2; // 2 for moving forward
     else if((x > y) && (y > - x)) return 3; // 3 for moving right
