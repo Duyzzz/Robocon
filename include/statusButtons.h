@@ -1,5 +1,4 @@
 #include <Arduino.h>
-#include <SimpleTimer.h>
 
 class Button{
     private:
@@ -29,27 +28,6 @@ class Button{
 
 };
 
-Button switchChangeStatusSpeed(PSB_SELECT);
-Button increaseSpeed(PSB_GREEN); /* bookkkkkkk*/
-Button decreaseSpeed(PSB_BLUE);
 
-unsigned long timeDelaySpeed = 0;
-bool speedStatus = false;
 
-SimpleTimer timerSpeedStatus;
-
-void determineSpeedStatus(){
-    if(ps2x.NewButtonState()){
-        ps2x.read_gamepad(false, vibrate);
-        vibrate = ps2x.Analog(PSAB_BLUE);
-        if(ps2x.Button(PSB_SELECT)){
-            speedStatus = !speedStatus;
-            if(speedStatus){
-                Serial.println("dang o mode chinh sua toc do");
-            }else {
-                Serial.println("dang o mode di chuyen");
-            }
-        }
-    }
-}
 

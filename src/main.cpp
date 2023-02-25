@@ -1,24 +1,14 @@
 #include<Arduino.h>
-#include <PS2X_lib.h>  //for v1.6
+#include <PS2X_lib.h> 
 #include "moving.h"
 #include <statusPs2.h>
 #include <statusButtons.h>
-
-/*
-  right now, the library does NOT support hot pluggable controllers, meaning 
-  you must always either restart your Arduino after you connect the controller, 
-  or call config_gamepad(pins) again after connecting the controller.
-*/
-// create PS2 Controller Class
-
-short speedValue = 120;
-
+#include <TimerOne.h>
 
 Car rabbit;
 
 void setUpRabbit(){
   rabbitSpeed = 120;
-  timeDelaySpeed = millis();
   rabbit.setTopLeftMotorPins(21, 20, 7);
   rabbit.setTopRightMotorPins(17, 16, 4);
   rabbit.setBottomLeftMotorPins(8, 10, 6);
@@ -26,10 +16,7 @@ void setUpRabbit(){
   rabbit.defineMotorPins();
 }
 
-SimpleTimer timer;
 void changeSpeed(){
-    ps2x.read_gamepad(false, vibrate);
-    vibrate = ps2x.Analog(PSAB_BLUE);
   if (ps2x.NewButtonState())
     {
       if(ps2x.ButtonPressed(PSB_GREEN)){
@@ -62,7 +49,6 @@ void moving(){
     {
       ps2x.read_gamepad(false, vibrate);
       vibrate = ps2x.Analog(PSAB_BLUE);
-    // will be TRUE if any button changes state (on to off, or off to on)
     
       if(ps2x.Button(PSB_L1) || ps2x.Button(PSB_R1))
       {
@@ -74,31 +60,25 @@ void moving(){
 void setup()
 {
   setUpRabbit();
-  setupFunction();
+   setupFunction();
   Serial.begin(57600);
-  timeDelayVariable = millis();
-  timer.setInterval(20, changeSpeed);
-  timerSpeedStatus.setInterval(20, determineSpeedStatus);
-  timerMoving.setInterval(20,moving);
-  speedStatus = false;
+
+  Timer1.initialize(20000);
+  Timer1.attachInterrupt(changeSpeed);
+  Timer1.start();
   Serial.print("start");
 }
 // test:
 
 
+
 void loop()
 {
-  timerSpeedStatus.run();
-  if(speedStatus){
-    /* scope nay de chinh toc do*/
-    timer.run();
-  }
-  else {
-    /*scope nay de cho robot chay*/
-    timerMoving.run();
-  }
-  //  timerMoving.run();
-  // timer.run();
-  // buttonJustClick();
+  if(millis() - timeDelayVariable > 20){
+  /*do something*/
+  
+  moving();
+  timeDelayVariable = millis();
+}
 }
 

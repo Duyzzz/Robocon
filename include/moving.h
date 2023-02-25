@@ -1,9 +1,7 @@
 #include <Arduino.h>
-#include <SimpleTimer.h>
 
 short rabbitSpeed;
 
-SimpleTimer timerMoving;
 
 class Motor{
     public:
