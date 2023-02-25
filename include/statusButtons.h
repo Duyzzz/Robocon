@@ -1,36 +1,19 @@
 #include <Arduino.h>
-
-const char switchSpeedStatusButton = PSB_SELECT; // default
-const char increaseButton = 11;
-const char decreaseButton = 9;
-short rabbitSpeed;
-bool speedStatus = false;
-unsigned long timeDelaySpeed = 0;
-
-void determineSpeedStatus(){
-    if(digitalRead(switchSpeedStatusButton) == 0 && speedStatus == false){
-        speedStatus = true;
-        timeDelaySpeed = millis();
-    }
-    if(millis() - timeDelaySpeed > 20 && digitalRead(switchSpeedStatusButton) == 1 && speedStatus == true){
-        speedStatus = false;
-    }
-}
-
+#include <SimpleTimer.h>
 
 class Button{
     private:
         bool Status;
         unsigned long TimeDelay;
-        unsigned short HexOfButton;
+        unsigned int HexOfButton;
     public:
-        Button(unsigned int intNumber, unsigned long timeDelay = 0, bool status = false){
-            HexOfButton = intNumber;
+        Button(unsigned int hexOfButton, unsigned long timeDelay = 0, bool status = false){
+            HexOfButton = hexOfButton;
             Status = status;
             TimeDelay = timeDelay;
         }
-        bool checkIfPress(){
-            return ps2x.Button(HexOfButton);
+        boolean checkIfPress(){
+            return ps2x.ButtonPressed(HexOfButton);
         }
         bool callStatus(){
             if(checkIfPress() && Status == false){
@@ -45,3 +28,28 @@ class Button{
         }
 
 };
+
+Button switchChangeStatusSpeed(PSB_SELECT);
+Button increaseSpeed(PSB_GREEN); /* bookkkkkkk*/
+Button decreaseSpeed(PSB_BLUE);
+
+unsigned long timeDelaySpeed = 0;
+bool speedStatus = false;
+
+SimpleTimer timerSpeedStatus;
+
+void determineSpeedStatus(){
+    if(ps2x.NewButtonState()){
+        ps2x.read_gamepad(false, vibrate);
+        vibrate = ps2x.Analog(PSAB_BLUE);
+        if(ps2x.Button(PSB_SELECT)){
+            speedStatus = !speedStatus;
+            if(speedStatus){
+                Serial.println("dang o mode chinh sua toc do");
+            }else {
+                Serial.println("dang o mode di chuyen");
+            }
+        }
+    }
+}
+

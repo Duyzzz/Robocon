@@ -3,6 +3,7 @@
 #include "moving.h"
 #include <statusPs2.h>
 #include <statusButtons.h>
+
 /*
   right now, the library does NOT support hot pluggable controllers, meaning 
   you must always either restart your Arduino after you connect the controller, 
@@ -10,16 +11,13 @@
 */
 // create PS2 Controller Class
 
-short speedValue = 123;
+short speedValue = 120;
 
-void changeSpeed(bool increaseOrDecrease/*true is increase false is decrease*/){
-  if(increaseOrDecrease) speedStatus = speedStatus + 10;
-  else speedStatus = speedStatus - 10;
-}
+
 Car rabbit;
 
 void setUpRabbit(){
-  rabbitSpeed = 123;
+  rabbitSpeed = 120;
   timeDelaySpeed = millis();
   rabbit.setTopLeftMotorPins(21, 20, 7);
   rabbit.setTopRightMotorPins(17, 16, 4);
@@ -27,10 +25,32 @@ void setUpRabbit(){
   rabbit.setBottomRightMotorPins(14, 15, 5);
   rabbit.defineMotorPins();
 }
+
+SimpleTimer timer;
+void changeSpeed(){
+    ps2x.read_gamepad(false, vibrate);
+    vibrate = ps2x.Analog(PSAB_BLUE);
+  if (ps2x.NewButtonState())
+    {
+      if(ps2x.ButtonPressed(PSB_GREEN)){
+          rabbitSpeed = rabbitSpeed + 10;
+          if(rabbitSpeed > 255) rabbitSpeed = 250;
+          Serial.print("Toc do hien tai: ");
+          Serial.println(rabbitSpeed);
+        }
+      if(ps2x.ButtonPressed(PSB_BLUE)){
+          rabbitSpeed = rabbitSpeed - 10;
+          if(rabbitSpeed <= 0) rabbitSpeed = 0;
+
+          Serial.print("Toc do hien tai: ");
+          Serial.println(rabbitSpeed);
+        }
+    }
+}
+
 unsigned long timeDelayVariable = 0;
 
 void moving(){
-  if(millis() - timeDelayVariable > 20){
     if(error == 1)
     return; 
   
@@ -40,40 +60,45 @@ void moving(){
     }
     else
     {
-    // DualShock Controller
-    // read controller and set large motor to spin at 'vibrate' speed
       ps2x.read_gamepad(false, vibrate);
-
-    // this will set the large motor vibrate speed based on how hard you press the blue (X) button
       vibrate = ps2x.Analog(PSAB_BLUE);
-    
     // will be TRUE if any button changes state (on to off, or off to on)
     
       if(ps2x.Button(PSB_L1) || ps2x.Button(PSB_R1))
       {
-        rabbit.run(ps2x.Analog(PSS_RX), ps2x.Analog(PSS_RY), 123);
+        rabbit.run(ps2x.Analog(PSS_RX), ps2x.Analog(PSS_RY), rabbitSpeed);
       }
     }
-    timeDelayVariable = millis();
-  }
 }
 
 void setup()
 {
   setUpRabbit();
-  Serial.begin(57600);
   setupFunction();
-
-  pinMode(increaseButton, INPUT_PULLUP);
-  pinMode(decreaseButton, INPUT_PULLUP);
-  pinMode(switchSpeedStatusButton, INPUT_PULLUP);
+  Serial.begin(57600);
+  timeDelayVariable = millis();
+  timer.setInterval(20, changeSpeed);
+  timerSpeedStatus.setInterval(20, determineSpeedStatus);
+  timerMoving.setInterval(20,moving);
+  speedStatus = false;
+  Serial.print("start");
 }
 // test:
-Button selectButton(PSB_SELECT);
 
 
 void loop()
 {
-  moving();
+  timerSpeedStatus.run();
+  if(speedStatus){
+    /* scope nay de chinh toc do*/
+    timer.run();
+  }
+  else {
+    /*scope nay de cho robot chay*/
+    timerMoving.run();
+  }
+  //  timerMoving.run();
+  // timer.run();
+  // buttonJustClick();
 }
 

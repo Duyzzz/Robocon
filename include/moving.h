@@ -1,4 +1,9 @@
 #include <Arduino.h>
+#include <SimpleTimer.h>
+
+short rabbitSpeed;
+
+SimpleTimer timerMoving;
 
 class Motor{
     public:
@@ -170,9 +175,5 @@ class Car {
       standStill();
       break;
     }
-    delay(20);
   }
 };
-
-
-
