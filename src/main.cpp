@@ -35,7 +35,6 @@ void changeSpeed(){
     }
 }
 
-unsigned long timeDelayVariable = 0;
 
 void moving(){
     if(error == 1)
@@ -48,8 +47,27 @@ void moving(){
     else
     {
       ps2x.read_gamepad(false, vibrate);
+      if(ps2x.Button(PSB_PAD_UP))
+    {
+      rabbit.moveForward(rabbitSpeed);
+      Serial.println("moving forward");
+    }
+    if(ps2x.Button(PSB_PAD_RIGHT))
+    {
+      Serial.println("moving right");
+      rabbit.moveRight(rabbitSpeed);
+    }
+    if(ps2x.Button(PSB_PAD_LEFT))
+    {
+      Serial.println("moving left");
+      rabbit.moveLeft(rabbitSpeed);
+    }
+    if(ps2x.Button(PSB_PAD_DOWN))
+    {
+      Serial.println("moving backward");
+      rabbit.moveBackward(rabbitSpeed);
+    }
       vibrate = ps2x.Analog(PSAB_BLUE);
-    
       if(ps2x.Button(PSB_L1) || ps2x.Button(PSB_R1))
       {
         rabbit.run(ps2x.Analog(PSS_RX), ps2x.Analog(PSS_RY), rabbitSpeed);
@@ -60,7 +78,7 @@ void moving(){
 void setup()
 {
   setUpRabbit();
-   setupFunction();
+  setupFunction();
   Serial.begin(57600);
 
   Timer1.initialize(20000);
@@ -70,15 +88,15 @@ void setup()
 }
 // test:
 
-
+unsigned long timeDelayVariable = 0;
 
 void loop()
 {
+  //buttonJustClick();
   if(millis() - timeDelayVariable > 20){
   /*do something*/
-  
-  moving();
-  timeDelayVariable = millis();
-}
+    moving();
+    timeDelayVariable = millis();
+  }
 }
 
