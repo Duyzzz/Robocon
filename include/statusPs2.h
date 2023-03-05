@@ -10,7 +10,7 @@ int error = 0;
   void setupFunction(){
     // CHANGES for v1.6 HERE!!! **************PAY ATTENTION*************
   // setup pins and settings:  GamePad(clock, command, attention, data, Pressures?, Rumble?) check for error
-  error = ps2x.config_gamepad(52, 48, 50, 46, true, true);
+  error = ps2x.config_gamepad(53, 49, 51, 47, true, true);
 
   if(error == 0)
   {
